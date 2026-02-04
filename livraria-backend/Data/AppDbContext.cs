@@ -12,6 +12,7 @@ namespace Livraria.Data
 
         public DbSet<AutorModel> Autor { get; set; }
         public DbSet<LivroModel> Livros { get; set; }
+		public DbSet<UsuarioModel> Usuario { get; set; }
 
-    }
+	}
 }
