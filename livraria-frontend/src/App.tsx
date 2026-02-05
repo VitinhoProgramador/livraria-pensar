@@ -5,7 +5,7 @@ import { MainLayout } from "./layouts/MainLayout";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Autor } from "./pages/Autores";
-
+import { ConfirmarEmail } from "./components/ConfirmarEmail";
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/autores" element={<Autor />} />
+          <Route path="/confirmar-email" element={<ConfirmarEmail />} />
         </Route>
 
       </Routes>

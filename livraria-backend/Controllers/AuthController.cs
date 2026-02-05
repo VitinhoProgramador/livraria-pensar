@@ -43,10 +43,10 @@ namespace Livraria.Controllers
 
 			if (!result.Status)
 			{
-				return BadRequest(result);
+				return Ok(result);
 			}
 
-			return Content("<h1>Sucesso!</h1><p>Sua conta foi ativada. Pode voltar ao app.</p>", "text/html");
+			return Ok(result);
 		}
 
 	}

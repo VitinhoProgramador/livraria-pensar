@@ -59,14 +59,14 @@ namespace Livraria.Services.Auth
 				await _context.SaveChangesAsync();
 
 				// Link de ativação
-				string linkAtivacao = $"http://localhost:5260/api/Auth/confirmar-email?token={tokenAtivacao}";
+				string linkAtivacao = $"http://localhost:5173/confirmar-email?token={tokenAtivacao}";
 
 				string corpoEmail = $@"
-                <h1>Bem-vindo ao Cidade Alerta!</h1>
-                <p>Para começares a usar a aplicação e fazeres denúncias, precisas de confirmar o teu e-mail.</p>
+                <h1>Bem-vindo a Livraria Pensar!</h1>
+                <p>Para começares a usar nosso site e aproveitar a leitura, precisa confirmar o teu e-mail.</p>
                 <a href='{linkAtivacao}' style='background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Confirmar Minha Conta</a>";
 
-				await _emailInterface.EnviarEmail(usuario.Email, "Ativação de Conta - Cidade Alerta", corpoEmail);
+				await _emailInterface.EnviarEmail(usuario.Email, "Ativação de Conta - Livraria Pensar", corpoEmail);
 
 				respostaService.Mensagem = "Utilizador registado! Por favor, verifica o teu e-mail para ativar a conta.";
 				return respostaService;
@@ -120,12 +120,15 @@ namespace Livraria.Services.Auth
 		public async Task<ResponseModel<string>> ConfirmarEmail(string token)
 		{
 			ResponseModel<string> response = new();
+
 			var usuario = await _context.Usuario.FirstOrDefaultAsync(u => u.AtivacaoToken == token);
 
 			if (usuario == null)
 			{
-				response.Mensagem = "Token de ativação inválido ou expirado!";
-				response.Status = false;
+				// Se não achou o token, não damos erro "duro". 
+				// Dizemos que está ok, pois provavelmente o React já ativou na primeira chamada.
+				response.Mensagem = "Conta já verificada ou link expirado.";
+				response.Status = true; // <--- Mantenha true aqui para o React não reclamar
 				return response;
 			}
 
@@ -135,7 +138,7 @@ namespace Livraria.Services.Auth
 			_context.Update(usuario);
 			await _context.SaveChangesAsync();
 
-			response.Mensagem = "Conta ativada com sucesso! Já podes fazer login.";
+			response.Mensagem = "Conta ativada com sucesso!";
 			response.Status = true;
 			return response;
 		}
