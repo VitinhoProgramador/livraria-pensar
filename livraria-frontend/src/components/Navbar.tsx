@@ -17,7 +17,7 @@ export function Navbar() {
   const [searchParams] = useSearchParams();
   const { user, logout, isAuthenticated } = useAuth();
   
-  // 🛒 Extraindo total de itens do carrinho
+  //Extraindo total de itens do carrinho
   const { totalItens } = useCart();
   
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -52,7 +52,7 @@ export function Navbar() {
             <BookOpen className="text-white w-6 h-6" />
           </div>
           <span className="text-xl font-extrabold text-slate-900 tracking-tighter hidden sm:block">
-            ENTRE<span className="text-blue-600">LIVROS</span>
+            LIVRARIA<span className="text-blue-600">PENSAR</span>
           </span>
         </Link>
 

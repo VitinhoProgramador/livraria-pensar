@@ -3,7 +3,7 @@ import { useCart } from "../contexts/CartContext";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from "lucide-react";
 
 export function Carrinho() {
-  const { items, adicionarLivro, removerLivro, valorTotal, totalItens } = useCart();
+  const { items, adicionarLivro, removerLivro, diminuirQuantidade, valorTotal, totalItens } = useCart();
 
   const precoFormatado = (valor: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
@@ -34,39 +34,41 @@ export function Carrinho() {
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => (
             <div key={item.id} className="bg-white border border-slate-200 rounded-2xl p-4 flex gap-4 items-center shadow-sm">
-              <img 
-                src={item.imagemCapa || "https://placehold.co/400x600?text=Sem+Capa"} 
-                alt={item.titulo} 
+              <img
+                src={item.imagemCapa || "https://placehold.co/400x600?text=Sem+Capa"}
+                alt={item.titulo}
                 className="w-20 h-28 object-cover rounded-lg shadow-sm"
               />
-              
+
               <div className="flex-1">
                 <h3 className="font-bold text-slate-800 line-clamp-1">{item.titulo}</h3>
                 <p className="text-sm text-slate-500 mb-2">{item.autor?.nome} {item.autor?.sobrenome}</p>
-                
+
                 <div className="flex items-center justify-between">
                   {/* Controles de Quantidade */}
                   <div className="flex items-center gap-3 bg-slate-100 rounded-lg p-1">
-                    <button 
-                      onClick={() => removerLivro(item.id)} // Lógica: se qtd=1 remove, senão diminui (ajustar no context se quiser diminuir)
+                    <button
+                      onClick={() => diminuirQuantidade(item.id)} // 🟢 Agora diminui em 1
                       className="p-1 hover:bg-white rounded-md transition-colors"
                     >
                       <Minus size={16} />
                     </button>
                     <span className="font-bold text-sm w-4 text-center">{item.quantidade}</span>
-                    <button 
-                      onClick={() => adicionarLivro(item)}
-                      className="p-1 hover:bg-white rounded-md transition-colors"
+                    <button
+                      onClick={() => adicionarLivro(item)} // 🟢 adicionarLivro já tem a trava de estoque
+                      disabled={item.quantidade >= item.estoque}
+                      className={`p-1 rounded-md transition-colors ${item.quantidade >= item.estoque ? 'text-slate-300' : 'hover:bg-white'
+                        }`}
                     >
                       <Plus size={16} />
                     </button>
                   </div>
-                  
+
                   <span className="font-bold text-slate-900">{precoFormatado(item.preco * item.quantidade)}</span>
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => removerLivro(item.id)}
                 className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
               >
@@ -80,7 +82,7 @@ export function Carrinho() {
         <div className="lg:col-span-1">
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm sticky top-24">
             <h2 className="text-lg font-bold text-slate-900 mb-6 italic underline">Resumo do Pedido</h2>
-            
+
             <div className="space-y-4 mb-6">
               <div className="flex justify-between text-slate-600">
                 <span>Subtotal</span>
@@ -100,7 +102,7 @@ export function Carrinho() {
             <button className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition-all active:scale-[0.98]">
               Finalizar Compra
             </button>
-            
+
             <Link to="/" className="block text-center mt-4 text-sm text-slate-500 hover:text-blue-600 font-medium">
               Continuar comprando
             </Link>

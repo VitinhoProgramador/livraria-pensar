@@ -9,6 +9,7 @@ interface User {
 interface AuthContextData {
   user: User | null;
   isAuthenticated: boolean;
+  loading: boolean;
   login: (email: string, senha: string) => Promise<void>;
   logout: () => void;
 }
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const isAuthenticated = !!user;
 
@@ -32,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         username: payload.Username,
       });
     }
+  setLoading(false); // <--- Terminou de checar, libera o app
   }, []);
 
   async function login(email: string, senha: string) {
@@ -59,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated,loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

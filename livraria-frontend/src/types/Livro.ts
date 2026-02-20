@@ -6,7 +6,7 @@ export interface Livro {
   titulo: string;
   descricao?: string;
   preco: number;
-  imagemCapa?: string; // URL da imagem
-  autor: Autor; // O autor vem aninhado ou apenas o AutorId
+  imagemCapa?: string; 
+  autor: Autor; 
   estoque: number;
 }
